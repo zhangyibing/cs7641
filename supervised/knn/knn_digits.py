@@ -7,9 +7,6 @@ print(__doc__)
 import numpy as np
 import matplotlib.pyplot as plt
 
-import csv
-import pdb
-
 from sklearn import neighbors
 from sklearn import datasets
 from sklearn.utils import shuffle
@@ -18,7 +15,7 @@ from filehelper import Images
 
 ###############################################################################
 # Load data
-datafile = '../data/trainsmall.csv'
+datafile = '../data/train.csv'
 images = Images()
 images.loadData(datafile)
 X, y = shuffle(images.data, images.target, random_state=13)
@@ -31,33 +28,48 @@ X_test, y_test = X[offset:], y[offset:]
 
 ###############################################################################
 # Fit regression model
-num_neighbors = np.arange(1, 20, 1)
-correctPredictions = []
+num_neighbors = np.arange(1, 10, 1)
+correctPredictionsUniform = []
+correctPredictionsWeighted = []
 
 for i, l in enumerate(num_neighbors):
   X_train, y_train = X[:offset], y[:offset]
-  X_test, y_test = X[offset:], y[offset:]
-  clf = neighbors.KNeighborsClassifier(n_neighbors=l)
-  clf.fit(X_train, y_train)
-  pred = clf.predict(X_test)
-  mse = mean_squared_error(y_test, pred)
-  print("MSE: %.4f" % mse)
+  X_test, y_testUniform, y_testWeighted = X[offset:], y[offset:], y[offset:]
+  clf1 = neighbors.KNeighborsClassifier(n_neighbors=l)
+  clf2 = neighbors.KNeighborsClassifier(n_neighbors=l, weights='distance')
+  clf1.fit(X_train, y_train)
+  pred1 = clf1.predict(X_test)
+  clf2.fit(X_train, y_train)
+  pred2 = clf2.predict(X_test)
+  mse1 = mean_squared_error(y_testUniform, pred1)
+  mse2 = mean_squared_error(y_testWeighted, pred2)
+  print("MSE Uniform: %.4f" % mse1)
+  print("MSE Distance: %.4f" % mse2)
 
-  correct = 0
-  for j in range(0, len(y_test)):
-    if y_test[j] == round(pred[j]):
-      correct = correct + 1
+  correctUniform = 0
+  for j in range(0, len(y_testUniform)):
+    if y_testUniform[j] == round(pred1[j]):
+      correctUniform = correctUniform + 1
 
-  correctPredictions.append((float(correct)/len(y_test)) * 100.0)
-  print("Prediction Correct Rate: " + str(((float(correct)/len(y_test)) * 100.0)))
+  correctWeighted = 0
+  for j in range(0, len(y_testWeighted)):
+    if y_testWeighted[j] == round(pred2[j]):
+      correctWeighted = correctWeighted + 1
+
+  correctPredictionsUniform.append((float(correctUniform)/len(y_testUniform)) * 100.0)
+  print("Prediction Correct Rate Uniform: " + str(((float(correctUniform)/len(y_testUniform)) * 100.0)))
+
+  correctPredictionsWeighted.append((float(correctWeighted)/len(y_testWeighted)) * 100.0)
+  print("Prediction Correct Rate Distance: " + str(((float(correctWeighted)/len(y_testWeighted)) * 100.0)))
 
 
 ###############################################################################
 # Plot training deviance
 
 plt.figure()
-plt.title('Boosting: Performace vs Number of Neighbors')
-plt.plot(num_neighbors, correctPredictions, lw=2, label = 'Prediction Correctness')
+plt.title('Decision Trees: Performace vs Number of Estimators')
+plt.plot(num_neighbors, correctPredictionsUniform, lw=2, label = 'Uniform Weights')
+plt.plot(num_neighbors, correctPredictionsWeighted, lw=2, label = 'Distance Weights')
 plt.legend()
 plt.xlabel('Number of Neighbors')
 plt.ylabel('Correct Prediction Percentage')
