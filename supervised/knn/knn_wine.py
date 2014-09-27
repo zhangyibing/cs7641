@@ -18,7 +18,7 @@ from filehelper import Wines
 
 ###############################################################################
 # Load data
-datafile = '../data/winequality-red.csv'
+datafile = '../data/winequality-white.csv'
 wines = Wines()
 wines.loadData(datafile)
 X, y = shuffle(wines.data, wines.target, random_state=13)

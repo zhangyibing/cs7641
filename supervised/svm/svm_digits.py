@@ -18,7 +18,7 @@ from filehelper import Images
 
 ###############################################################################
 # Load data
-datafile = '../data/train.csv'
+datafile = '../data/trainsmall.csv'
 images = Images()
 images.loadData(datafile)
 X, y = shuffle(images.data, images.target, random_state=13)
@@ -32,8 +32,8 @@ X_test, y_test = X[offset:], y[offset:]
 ###############################################################################
 # Fit regression model
 correctPredictions = []
-#kernelFunctions = ['linear', 'poly', 'rbf', 'sigmoid']
-kernelFunctions = ['linear']
+kernelFunctions = ['linear', 'poly', 'rbf', 'sigmoid']
+#kernelFunctions = ['linear']
 
 for i, l in enumerate(kernelFunctions):
   X_train, y_train = X[:offset], y[:offset]

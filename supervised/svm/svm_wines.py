@@ -32,12 +32,12 @@ X_test, y_test = X[offset:], y[offset:]
 ###############################################################################
 # Fit regression model
 correctPredictions = []
-kernelFunctions = ['linear', 'poly', 'rbf', 'sigmoid']
+kernelFunctions = ['linear', 'rbf', 'sigmoid']
 
 for i, l in enumerate(kernelFunctions):
   X_train, y_train = X[:offset], y[:offset]
   X_test, y_test = X[offset:], y[offset:]
-  clf = svm.SVC(kernel=kernelFunctions[i])
+  clf = svm.SVC(kernel=kernelFunctions[i], random_state=40, C=.9)
   clf.fit(X_train, y_train)
   pred = clf.predict(X_test)
   mse = mean_squared_error(y_test, pred)
@@ -55,12 +55,12 @@ for i, l in enumerate(kernelFunctions):
 ###############################################################################
 # Plot training deviance
 
-rects = plt.bar(np.arange(4), correctPredictions)
+rects = plt.bar(np.arange(3), correctPredictions)
 
 plt.xlabel('Kernels')
 plt.ylabel('Prediction Correctness')
 plt.title('Prediction Correctness by Kernel Type')
-plt.xticks(np.arange(4) + .4, kernelFunctions)
+plt.xticks(np.arange(3) + .4, kernelFunctions)
 plt.legend()
 
 plt.tight_layout()

@@ -13,6 +13,8 @@ from sklearn.metrics import mean_squared_error
 from filehelper import Images
 from sklearn.metrics import confusion_matrix
 
+import pdb
+
 ###############################################################################
 # Load data
 datafile = '../data/trainsmall.csv'
@@ -66,18 +68,20 @@ cm = confusion_matrix(y_test, pred)
 ###############################################################################
 # Plot training deviance
 # 
-plt.matshow(cm)
-plt.title('Confusion matrix')
-plt.colorbar()
-plt.ylabel('True label')
-plt.xlabel('Predicted label')
-plt.show()
+# plt.matshow(cm)
+# plt.title('Confusion matrix')
+# plt.colorbar()
+# plt.ylabel('True label')
+# plt.xlabel('Predicted label')
+# plt.show()
 
-plt.figure()
-plt.title('Random Forest: Performace vs Number of Estimators')
-plt.plot(num_estimators, correctPredictions, lw=2, label = 'Correct Prediction Test')
-plt.plot(num_estimators, correctTrainingPredictions, lw=2, label = 'Correct Prediction Training')
-plt.legend(loc='best')
-plt.xlabel('Number of Estimators')
-plt.ylabel('Correct Prediction Percentage')
-plt.show()
+# pdb.set_trace()
+
+# plt.figure()
+# plt.title('Random Forest: Performace vs Number of Estimators')
+# plt.plot(num_estimators, correctPredictions, lw=2, label = 'Correct Prediction Test')
+# plt.plot(num_estimators, correctTrainingPredictions, lw=2, label = 'Correct Prediction Training')
+# plt.legend(loc='best')
+# plt.xlabel('Number of Estimators')
+# plt.ylabel('Correct Prediction Percentage')
+# plt.show()
